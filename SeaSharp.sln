@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31321.278
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SeaSharp-UI", "SeaSharp-UI\SeaSharp-UI.csproj", "{C11EE17C-2F60-408A-924D-399B7369068E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainTests", "MainTests\MainTests.csproj", "{823AC554-8C00-4504-8559-409FEF9F2DB9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C11EE17C-2F60-408A-924D-399B7369068E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C11EE17C-2F60-408A-924D-399B7369068E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C11EE17C-2F60-408A-924D-399B7369068E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C11EE17C-2F60-408A-924D-399B7369068E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{823AC554-8C00-4504-8559-409FEF9F2DB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{823AC554-8C00-4504-8559-409FEF9F2DB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{823AC554-8C00-4504-8559-409FEF9F2DB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{823AC554-8C00-4504-8559-409FEF9F2DB9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {0E65BA0B-93D2-45A8-A7BB-D72A7A0C084F}
+	EndGlobalSection
+EndGlobal
