@@ -26,10 +26,12 @@ namespace SeaSharp_UI
         {
             InitializeComponent();
 
-            this.creature = new Creature(Dispatcher, MainCanvas);
-            this.creature.PropertyChanged += HandleCreatureUpdate;
+            creature = new Creature(Dispatcher, MainCanvas);
+            creature.PropertyChanged += HandleCreatureUpdate;
 
-            this.creature.Name = selectedCreature;
+            creature.Name = selectedCreature;
+
+            creature.Start();
         }
 
         public void HandleCreatureUpdate(object sender, PropertyChangedEventArgs e)
@@ -37,7 +39,7 @@ namespace SeaSharp_UI
             switch (e.PropertyName)
             {
                 case "Name":
-                    renderCreatureName(this.creature.Name);
+                    renderCreatureName(creature.Name);
                     break;
             }
         }
@@ -49,6 +51,11 @@ namespace SeaSharp_UI
 
         private void GoBackToCharacterSelect(object sender, RoutedEventArgs e)
         {
+            if (creature != null)
+            {
+                creature.Shutdown();
+            }
+
             Window mainWindow = new MainWindow();
 
             Window currentWindow = App.Current.MainWindow;
@@ -62,7 +69,7 @@ namespace SeaSharp_UI
 
             App.Current.MainWindow = mainWindow;
 
-            this.Close();
+            Close();
             mainWindow.Show();
         }
     }

@@ -24,11 +24,11 @@ namespace SeaSharp_UI
         {
             get
             {
-                return this.creatureName;
+                return creatureName;
             }
             set
             {
-                this.creatureName = value;
+                creatureName = value;
                 NotifyPropertyChanged("Name");
             }
         }
