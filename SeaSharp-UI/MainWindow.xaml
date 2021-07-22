@@ -5,8 +5,25 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SeaSharp_UI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="SeaSharp" Height="450" Width="800">
     <Grid>
-        
+        <TextBlock HorizontalAlignment="Center" Margin="0,76,0,0" TextWrapping="Wrap" Text="Choose a Sea Creature" VerticalAlignment="Top" FontSize="25"/>
+        <Grid Margin="100,150,100,100">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Click="Button_Click" x:Name="CrabBtn" >
+                <Image Source="/Assets/crab.png" />
+            </Button>
+            <Button Click="Button_Click" x:Name="DolphinBtn"  Grid.ColumnSpan="1" Grid.Column="1">
+                <Image Source="/Assets/dolphin.png" />
+            </Button>
+            <Button Click="Button_Click" x:Name="SeahorseBtn" Grid.ColumnSpan="1" Grid.Column="2" >
+                <Image Source="/Assets/seahorse.png" />
+            </Button>
+        </Grid>
+
     </Grid>
 </Window>
