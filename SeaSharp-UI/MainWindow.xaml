@@ -14,13 +14,13 @@
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Click="Button_Click" x:Name="CrabBtn" >
+            <Button Margin="20,20,20,20" Click="Button_Click" x:Name="CrabBtn" >
                 <Image Source="/Assets/crab.png" />
             </Button>
-            <Button Click="Button_Click" x:Name="DolphinBtn"  Grid.ColumnSpan="1" Grid.Column="1">
+            <Button Margin="20,20,20,20" Click="Button_Click" x:Name="DolphinBtn"  Grid.ColumnSpan="1" Grid.Column="1">
                 <Image Source="/Assets/dolphin.png" />
             </Button>
-            <Button Click="Button_Click" x:Name="SeahorseBtn" Grid.ColumnSpan="1" Grid.Column="2" >
+            <Button Margin="20,20,20,20" Click="Button_Click" x:Name="SeahorseBtn" Grid.ColumnSpan="1" Grid.Column="2" >
                 <Image Source="/Assets/seahorse.png" />
             </Button>
         </Grid>

@@ -48,7 +48,6 @@ namespace SeaSharp_UI
         {
             Control control = sender as Control;
 
-            Console.WriteLine($"Button Clicked: {control.Name}");
 
             string creature = null;
 

@@ -7,6 +7,16 @@
         mc:Ignorable="d"
         Title="GameWindow" Height="450" Width="800">
     <Grid>
-        
+        <Grid Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="203*"></ColumnDefinition>
+                <ColumnDefinition Width="593*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Button Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center" Width="150" Content="Play with different creature"/>
+            <TextBlock Grid.Column="1" Text="Creature" FontSize="30" TextAlignment="Center" Name="GameTitle">
+
+            </TextBlock>
+        </Grid>
+        <Canvas Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,50,0,0" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>

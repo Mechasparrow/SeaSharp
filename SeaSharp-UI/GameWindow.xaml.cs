@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,21 +20,50 @@ namespace SeaSharp_UI
     /// </summary>
     public partial class GameWindow : Window
     {
-        private string selectedCreature = null;
+        private Creature creature = null;
 
         public GameWindow(string selectedCreature)
         {
             InitializeComponent();
 
-            this.selectedCreature = selectedCreature;
-            this.LogSelectedCreature();
+            this.creature = new Creature(Dispatcher, MainCanvas);
+            this.creature.PropertyChanged += HandleCreatureUpdate;
+
+            this.creature.Name = selectedCreature;
         }
 
-        void LogSelectedCreature()
+        public void HandleCreatureUpdate(object sender, PropertyChangedEventArgs e)
         {
-            System.Console.WriteLine("The selected creature is ");
-            System.Console.WriteLine(this.selectedCreature);
+            switch (e.PropertyName)
+            {
+                case "Name":
+                    renderCreatureName(this.creature.Name);
+                    break;
+            }
         }
 
+        private void renderCreatureName(string creatureName)
+        {
+            GameTitle.Text = $"Playing with {creatureName}";
+        }
+
+        private void GoBackToCharacterSelect(object sender, RoutedEventArgs e)
+        {
+            Window mainWindow = new MainWindow();
+
+            Window currentWindow = App.Current.MainWindow;
+            var oldLeftX = currentWindow.Left;
+            var oldTopY = currentWindow.Top;
+
+            mainWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+
+            mainWindow.Left = oldLeftX;
+            mainWindow.Top = oldTopY;
+
+            App.Current.MainWindow = mainWindow;
+
+            this.Close();
+            mainWindow.Show();
+        }
     }
 }
