@@ -10,39 +10,9 @@ using System.Windows.Threading;
 
 namespace SeaSharp_UI
 {
-    //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged.propertychanged?view=net-5.0
-    class Creature : INotifyPropertyChanged
+    class Creature : AbstractCreature
     {
-        private string creatureName;
-        private Dispatcher dispatcher;
-        private Canvas mainCanvas;
-
-        public event PropertyChangedEventHandler PropertyChanged;
-        
-        private void NotifyPropertyChanged([CallerMemberName] string propertyName = "")
-        {
-            if (PropertyChanged != null)
-            {
-                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-            }
-        }
-
-        public string Name
-        {
-            get
-            {
-                return this.creatureName;
-            }
-            set
-            {
-                this.creatureName = value;
-                NotifyPropertyChanged("Name");
-            }
-        }
-
-        public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas)
-        {
-        }
+        public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas) { }
 
         public Creature(string creatureName, Dispatcher dispatcher, Canvas mainCanvas)
         {
