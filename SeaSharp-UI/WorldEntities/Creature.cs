@@ -194,6 +194,19 @@ namespace SeaSharp_UI.Entities
             }
         }
 
+        private Velocity velocityTowardsTarget(double targetX, double targetY, double magnitude)
+        {
+            double distanceX = targetX - x;
+            double distanceY = targetY - y;
+
+            double targetDistance = Math.Sqrt(Math.Pow(distanceX, 2) + Math.Pow(distanceY, 2));
+
+            double normalizedX = distanceX / targetDistance;
+            double normalizedY = distanceY / targetDistance;
+
+            return new Velocity(normalizedX * magnitude, normalizedY * magnitude);
+        }
+
         private Velocity GenerateRandomVelocity()
         {
             Velocity[] directions = new Velocity[]
