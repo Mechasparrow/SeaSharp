@@ -16,7 +16,6 @@ namespace SeaSharp_UI
 
         private Thread creatureThread = null;
         private bool paused = false;
-        private bool creatureDestroyed = false;
 
         private Image creatureImage = null;
 
@@ -27,11 +26,8 @@ namespace SeaSharp_UI
             this.creatureName = creatureName;
             this.dispatcher = dispatcher;
             this.mainCanvas = mainCanvas;
-            this.x = 50;
-            this.y = 50;
 
             creatureThread = new Thread(CreatureLoop);
-
         }
 
         public void Start()
@@ -61,7 +57,7 @@ namespace SeaSharp_UI
 
         private void CreatureLoop()
         {
-            while (!creatureDestroyed)
+            while (true)
             {
                 if (paused)
                 {
@@ -79,7 +75,6 @@ namespace SeaSharp_UI
         {
             if (creatureThread != null)
             {
-                creatureDestroyed = true;
 
                 if (creatureThread.ThreadState != ThreadState.Stopped)
                 {
