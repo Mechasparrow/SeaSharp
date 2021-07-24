@@ -36,16 +36,17 @@ namespace SeaSharp_UI
 
         public void Start()
         {
+            int creatureSize = 128;
             creatureImage = new Image();
             creatureImage.Source = ImageHelper.LoadBitmapImage($"{Name}.png", 256);
-            creatureImage.Width = 128;
+            creatureImage.Width = creatureSize;
 
             mainCanvas.Children.Add(creatureImage);
 
-            int midWidth = 800 / 2;
-            int midHeight = (450 - 50) / 2;
+            int midWidth = (int)mainCanvas.ActualWidth / 2;
+            int midHeight = (int)(mainCanvas.ActualHeight) / 2;
 
-            UpdateLocation(midWidth - 64, midHeight - 64);
+            UpdateLocation(midWidth - (creatureSize/2), midHeight - (creatureSize/2));
 
             creatureThread.Start();
         }
