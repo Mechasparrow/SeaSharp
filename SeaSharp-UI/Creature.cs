@@ -16,7 +16,6 @@ namespace SeaSharp_UI
 
         private Thread creatureThread = null;
         private bool paused = false;
-
         private Image creatureImage = null;
 
         public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas) { }
@@ -51,8 +50,18 @@ namespace SeaSharp_UI
         {
             base.UpdateLocation(newX, newY);
 
-            Canvas.SetLeft(creatureImage, this.x);
-            Canvas.SetTop(creatureImage, this.y);
+            Canvas.SetLeft(creatureImage, x);
+            Canvas.SetTop(creatureImage, y);
+        }
+
+        private void CreatureLogic()
+        {
+            Console.WriteLine("creature running");
+
+            dispatcher.Invoke(() =>
+            {
+                UpdateLocation(x + 5, y);
+            });
         }
 
         private void CreatureLoop()
@@ -64,9 +73,9 @@ namespace SeaSharp_UI
                     continue;
                 }
 
-                Console.WriteLine("creature running");
+                CreatureLogic();
 
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
             
         }

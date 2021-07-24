@@ -139,6 +139,10 @@ namespace SeaSharp_UI
             RenderSea();
 
             creature.Start();
+
+            Food food = new Food(Dispatcher, MainCanvas);
+            food.Start();
+
         }
     }
 }
