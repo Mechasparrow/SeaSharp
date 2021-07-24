@@ -39,6 +39,8 @@ namespace SeaSharp_UI
             creature.Name = selectedCreature;
 
             world.AddEntity(creature);
+
+            renderDaysPassed(0);
         }
 
         public void RenderSea()
@@ -103,12 +105,20 @@ namespace SeaSharp_UI
                     renderCreatureName(creature.Name);
                     break;
                 case "Hunger":
-                    UpdateFoodBar(creature.Hunger);
+                    renderFoodbar(creature.Hunger);
+                    break;
+                case "Day":
+                    renderDaysPassed(creature.DaysPassed);
                     break;
             }
         }
 
-        private void UpdateFoodBar(double hunger)
+        private void renderDaysPassed(int days)
+        {
+            TimeText.Text = $"Days {creature.DaysPassed}";
+        }
+
+        private void renderFoodbar(double hunger)
         {
             CreatureHungerBar.Value = hunger;
         }

@@ -54,6 +54,10 @@ namespace SeaSharp_UI.Entities
         private double timeThreshold = 1.0;
         private int threadTickTime = 100;
 
+        private double timeLivedElapsed = 0.0;
+        private double dayThreshold = 10.0;
+        private int daysPassed = 0;
+
         private double hunger = 0.0;
 
         private Random random = new Random();
@@ -63,6 +67,14 @@ namespace SeaSharp_UI.Entities
             get
             {
                 return this.targetingEntity;
+            }
+        }
+
+        public int DaysPassed
+        {
+            get
+            {
+                return daysPassed;
             }
         }
 
@@ -127,6 +139,19 @@ namespace SeaSharp_UI.Entities
             bool updateDirection = false;
 
             timeElapsed += threadTickTime / 1000.0;
+            timeLivedElapsed += threadTickTime / 1000.0;
+
+            if (timeLivedElapsed >= dayThreshold)
+            {
+                timeLivedElapsed = 0;
+
+                dispatcher.BeginInvoke(new Action(() =>
+               {
+                   daysPassed += 1;
+                   NotifyPropertyChanged("Day");
+               }));
+            }
+
             if (timeElapsed >= timeThreshold)
             {
                 updateDirection = true;
