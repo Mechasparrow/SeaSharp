@@ -54,6 +54,8 @@ namespace SeaSharp_UI.Entities
         private double timeThreshold = 1.0;
         private int threadTickTime = 100;
 
+        private double hunger = 0.0;
+
         private Random random = new Random();
 
         public AbstractEntity TargetingEntity
@@ -63,6 +65,17 @@ namespace SeaSharp_UI.Entities
                 return this.targetingEntity;
             }
         }
+
+        public double Hunger
+        {
+            get
+            {
+                return hunger;
+            }
+        }
+
+        private double canvasWidth = 0;
+        private double canvasHeight = 0;
 
         public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas) { }
 
@@ -84,11 +97,15 @@ namespace SeaSharp_UI.Entities
             creatureImage.Width = creatureSize;
 
             mainCanvas.Children.Add(creatureImage);
-            
-            int midWidth = (int)mainCanvas.ActualWidth / 2;
-            int midHeight = (int)mainCanvas.ActualHeight / 2;
+
+            canvasWidth = mainCanvas.ActualWidth;
+            canvasHeight = mainCanvas.ActualHeight;
+
+            int midWidth = (int)canvasWidth / 2;
+            int midHeight = (int)canvasHeight / 2;
 
             UpdateLocation(midWidth - (creatureSize/2), midHeight - (creatureSize/2));
+
 
             creatureThread.Start();
         }
@@ -97,15 +114,15 @@ namespace SeaSharp_UI.Entities
         {
             base.UpdateLocation(newX, newY);
 
-            Canvas.SetLeft(creatureImage, x);
-            Canvas.SetTop(creatureImage, y);
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                Canvas.SetLeft(creatureImage, x);
+                Canvas.SetTop(creatureImage, y);
+            }));
         }
 
         private void CreatureLogic()
         {
-            double canvasWidth = 0;
-            double canvasHeight = 0;
-
             bool updateDirection = false;
 
             timeElapsed += threadTickTime / 1000.0;
@@ -115,15 +132,8 @@ namespace SeaSharp_UI.Entities
                 timeElapsed = 0;
             }
 
-
             if (creatureState == CreatureState.MOVING_WITH_NO_PURPOSE)
             {
-                dispatcher.Invoke(() =>
-                {
-                    canvasWidth = mainCanvas.ActualWidth;
-                    canvasHeight = mainCanvas.ActualHeight;
-                });
-
 
                 double oldDx = velocity.dx;
 
@@ -138,26 +148,17 @@ namespace SeaSharp_UI.Entities
 
                 DirectionFlipUpdate(oldDx, newDx);
 
-                dispatcher.Invoke(() =>
-                {
-                    UpdateLocation(x + velocity.dx, y + velocity.dy);
-                });
-            }else if (creatureState == CreatureState.HEADING_TOWARDS_FOOD)
+                
+                UpdateLocation(x + velocity.dx, y + velocity.dy);
+
+            }
+            else if (creatureState == CreatureState.HEADING_TOWARDS_FOOD)
             {
-                dispatcher.Invoke(() =>
-                {
-                    canvasWidth = mainCanvas.ActualWidth;
-                    canvasHeight = mainCanvas.ActualHeight;
-                });
 
                 CanvasBoundsCheck(canvasWidth, canvasHeight);
 
-                dispatcher.Invoke(() =>
-                {
-                    UpdateLocation(x + velocity.dx, y + velocity.dy);
-                });
+                UpdateLocation(x + velocity.dx, y + velocity.dy);
             }
-
 
         }
 
@@ -172,6 +173,7 @@ namespace SeaSharp_UI.Entities
 
                 CreatureLogic();
 
+                
                 Thread.Sleep(threadTickTime);
             }
             
@@ -185,7 +187,7 @@ namespace SeaSharp_UI.Entities
             if (oldDx != newDx && newDx != 0)
             {
 
-                dispatcher.Invoke(() =>
+                dispatcher.InvokeAsync(() =>
                 {
                     BitmapSource bitmapSource = null;
 
@@ -279,6 +281,15 @@ namespace SeaSharp_UI.Entities
                     if (affectedEntities.Contains(this) && affectedEntities.Contains(targetingEntity))
                     {
                         world.RemoveEntity(targetingEntity);
+                        targetingEntity = null;
+
+                        dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            hunger += 10;
+                            NotifyPropertyChanged("Hunger");
+                        }));
+
+                        creatureState = CreatureState.MOVING_WITH_NO_PURPOSE;
                     }
 
                     break;

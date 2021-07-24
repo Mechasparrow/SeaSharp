@@ -102,7 +102,15 @@ namespace SeaSharp_UI
                 case "Name":
                     renderCreatureName(creature.Name);
                     break;
+                case "Hunger":
+                    UpdateFoodBar(creature.Hunger);
+                    break;
             }
+        }
+
+        private void UpdateFoodBar(double hunger)
+        {
+            CreatureHungerBar.Value = hunger;
         }
 
         private void renderCreatureName(string creatureName)
@@ -152,6 +160,11 @@ namespace SeaSharp_UI
             food.Start();
 
             world.AddEntity(food);
+
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
 
         }
     }

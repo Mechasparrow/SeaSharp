@@ -52,7 +52,11 @@ namespace SeaSharp_UI.Entities
 
         public override void Destroy()
         {
-            mainCanvas.Children.Remove(foodImage);
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+
+                mainCanvas.Children.Remove(foodImage);
+            }));
             base.Destroy();
         }
     }

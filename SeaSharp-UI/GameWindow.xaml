@@ -1,4 +1,5 @@
 ﻿<Window 
+        SizeChanged="Window_SizeChanged"
         Closing="Window_Closing"
         x:Class="SeaSharp_UI.GameWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -11,14 +12,17 @@
     <Grid>
         <Grid Height="50" VerticalAlignment="Top" HorizontalAlignment="Stretch">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="203*"></ColumnDefinition>
-                <ColumnDefinition Width="593*"></ColumnDefinition>
+                <ColumnDefinition Width="105*"></ColumnDefinition>
+                <ColumnDefinition Width="193*"></ColumnDefinition>
+                <ColumnDefinition Width="99*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center" Width="150" Content="Play with different creature"/>
-            <TextBlock Grid.Column="1" Text="Creature" FontSize="30" TextAlignment="Center" Name="GameTitle">
-
-            </TextBlock>
+            <Button Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center" Content="Play with different creature"/>
+            <TextBlock FontSize="30" TextAlignment="Center" x:Name="GameTitle" Margin="123,0,7.2,0" Grid.ColumnSpan="2"><Run Text="Creature"/></TextBlock>
+            <DockPanel Margin="10.8,15,8.6,15" VerticalAlignment="Center" Grid.Column="2" Height="20" >
+                <TextBlock Margin="0,0,10,0">Hunger:</TextBlock>
+                <ProgressBar x:Name="CreatureHungerBar" VerticalAlignment="Top" Value="0.0" Height="20"/>
+            </DockPanel>
         </Grid>
-        <Canvas Loaded="MainCanvas_Loaded"  Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,50,0,0" VerticalAlignment="Stretch"/>
+        <Canvas Loaded="MainCanvas_Loaded"  Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,60,0,0" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
