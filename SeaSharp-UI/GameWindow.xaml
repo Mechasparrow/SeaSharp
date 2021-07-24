@@ -17,13 +17,17 @@
                 <ColumnDefinition Width="99*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Button Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center" Content="Play with different creature"/>
-            <TextBlock FontSize="30" TextAlignment="Center" x:Name="GameTitle" Margin="123,0,7.2,0" Grid.ColumnSpan="2"><Run Text="Creature"/></TextBlock>
+            <StackPanel  Grid.Column="1">
+                <TextBlock FontSize="24" TextAlignment="Center" x:Name="GameTitle"><Run Text="Creature"/></TextBlock>
+                <TextBlock Name="TimeText"  TextAlignment="Center"  Text="Day 1"></TextBlock>
+            </StackPanel>
             <StackPanel Grid.Column="2" >
                 <DockPanel VerticalAlignment="Center" >
                     <TextBlock Margin="0,0,10,0">Hunger:</TextBlock>
                     <ProgressBar x:Name="CreatureHungerBar" VerticalAlignment="Top" Value="0.0" Height="20"/>
                 </DockPanel>
                 
+
                 <Button Content="Feed" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Click="FeedCreatureButtonClick" />
             </StackPanel>
         </Grid>
