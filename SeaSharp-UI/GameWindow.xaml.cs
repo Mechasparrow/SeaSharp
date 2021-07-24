@@ -13,6 +13,9 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
+using SeaSharp_UI.Helpers;
+using SeaSharp_UI.Entities;
+
 namespace SeaSharp_UI
 {
     /// <summary>

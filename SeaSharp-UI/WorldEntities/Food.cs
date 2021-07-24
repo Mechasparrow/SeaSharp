@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 using System.Windows.Controls;
 using System.Windows.Threading;
 
-namespace SeaSharp_UI
+using SeaSharp_UI.Helpers;
+
+namespace SeaSharp_UI.Entities
 {
     class Food
     {
