@@ -13,12 +13,40 @@ namespace SeaSharp_UI
 {
 
     //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged.propertychanged?view=net-5.0
+    //^ This should help isolate the Model, View, and Controller
     abstract class AbstractCreature : INotifyPropertyChanged
     {
 
         protected string creatureName;
         protected Dispatcher dispatcher;
         protected Canvas mainCanvas;
+
+        protected int x;
+        protected int y;
+
+        public int X
+        {
+            get
+            {
+                return x;
+            }
+            set
+            {
+                x = value;
+            }
+        }
+
+        public int Y
+        {
+            get
+            {
+                return y;
+            }
+            set
+            {
+                y = value;
+            }
+        }
 
         public string Name
         {
@@ -43,17 +71,11 @@ namespace SeaSharp_UI
             }
         }
 
-        protected virtual BitmapImage LoadBitmapImage(string path)
+        protected virtual void UpdateLocation(int newX, int newY)
         {
-            string newPath = System.IO.Path.Combine(Environment.CurrentDirectory, path);
-
-            BitmapImage myBitmapImage = new BitmapImage();
-            myBitmapImage.BeginInit();
-            myBitmapImage.UriSource = new Uri(newPath);
-            myBitmapImage.DecodePixelWidth = 128;
-            myBitmapImage.EndInit();
-
-            return myBitmapImage;
+            x = newX;
+            y = newY;
         }
+
     }
 }

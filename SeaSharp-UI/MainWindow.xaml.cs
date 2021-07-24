@@ -20,9 +20,28 @@ namespace SeaSharp_UI
     /// </summary>
     public partial class MainWindow : Window
     {
+
+        List<string> availableCreatures = new List<string>()
+        {
+            "crab",
+            "dolphin",
+            "seahorse"
+        };
+
         public MainWindow()
         {
             InitializeComponent();
+
+            List<Image> creatureImages = new List<Image>() { CreatureImage1, CreatureImage2, CreatureImage3 };
+            string[] creatureNames = availableCreatures.ToArray();
+
+            int i = 0;
+            foreach (Image creatureImage in creatureImages)
+            {
+                creatureImage.Source = ImageHelper.LoadBitmapImage($"{creatureNames[i]}.png", 128);
+                creatureImage.DataContext = creatureNames[i];
+                i = (i + 1) % creatureImages.Count;
+            }
         }
 
         private void SwitchToGameWindow(string creature)
@@ -48,24 +67,9 @@ namespace SeaSharp_UI
         {
             Control control = sender as Control;
 
-
-            string creature = null;
-
-            switch (control.Name)
-            {
-                case "CrabBtn":
-                    creature = "crab";
-                    break;
-                case "DolphinBtn":
-                    creature = "dolphin";
-                    break;
-                case "SeahorseBtn":
-                    creature = "seahorse";
-                    break;
-                default:
-                    creature = "crab";
-                    break;
-            }
+            string creatureImageName = control.Name.Replace("Button", "CreatureImage");
+            Image creatureImage = FindName(creatureImageName) as Image;
+            string creature = creatureImage.DataContext as string;
 
             SwitchToGameWindow(creature);
         }

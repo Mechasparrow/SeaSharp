@@ -72,5 +72,13 @@ namespace SeaSharp_UI
             Close();
             mainWindow.Show();
         }
+
+        private void Window_Closing(object sender, CancelEventArgs e)
+        {
+            if (creature != null)
+            {
+                creature.Shutdown();
+            }
+        }
     }
 }
