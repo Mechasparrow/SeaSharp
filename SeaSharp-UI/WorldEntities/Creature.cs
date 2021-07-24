@@ -118,6 +118,7 @@ namespace SeaSharp_UI.Entities
             {
                 Canvas.SetLeft(creatureImage, x);
                 Canvas.SetTop(creatureImage, y);
+
             }));
         }
 

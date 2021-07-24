@@ -156,16 +156,21 @@ namespace SeaSharp_UI
 
             creature.Start();
 
-            Food food = new Food(Dispatcher, MainCanvas);
-            food.Start();
-
-            world.AddEntity(food);
-
         }
 
         private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
 
+        }
+
+        private void FeedCreatureButtonClick(object sender, RoutedEventArgs e)
+        {
+            Food food = new Food(Dispatcher, MainCanvas);
+            food.SetRandomLocation();
+            food.Start();
+
+
+            world.AddEntity(food);
         }
     }
 }

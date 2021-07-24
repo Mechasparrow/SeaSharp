@@ -88,12 +88,21 @@ namespace SeaSharp_UI
                 }
 
                 Rect targetRect = new Rect(new Point(targetingEntity.X, targetingEntity.Y), new Size(targetingEntity.EntitySize, targetingEntity.EntitySize));
+                
+
                 Rect creatureRect = new Rect(new Point(creature.X, creature.Y), new Size(creature.EntitySize, creature.EntitySize));
+               
 
                 bool collisionOccured = targetRect.IntersectsWith(creatureRect);
                 
                 if (collisionOccured)
                 {
+                    Console.WriteLine($"Target X: {targetingEntity.X} Target Y: {targetingEntity.Y}");
+                    Console.WriteLine($"Target size: {targetingEntity.EntitySize}");
+
+                    Console.WriteLine($"Creature X: {creature.X}, Creature Y: {creature.Y}");
+                    Console.WriteLine($"Creature Size: {creature.EntitySize}");
+
                     EmitWorldUpdate(WorldEventType.ENTITY_COLLISION, new List<AbstractEntity>()
                     {
                         creature,

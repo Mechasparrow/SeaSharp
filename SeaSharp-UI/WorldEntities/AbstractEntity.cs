@@ -61,6 +61,7 @@ namespace SeaSharp_UI.WorldEntities
             set
             {
                 name = value;
+                NotifyPropertyChanged("Name");
             }
         }
 

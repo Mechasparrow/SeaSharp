@@ -31,12 +31,26 @@ namespace SeaSharp_UI.Entities
             }
         }
 
+        private double canvasWidth;
+        private double canvasHeight;
+
+        private Random random = new Random();
+
         public Food(Dispatcher dispatcher, Canvas mainCanvas)
         {
             this.dispatcher = dispatcher;
             this.mainCanvas = mainCanvas;
 
             this.entitySize = 56;
+
+            this.canvasWidth = mainCanvas.ActualWidth;
+            this.canvasHeight = mainCanvas.ActualHeight;
+        }
+
+        public void SetRandomLocation()
+        {
+            x = random.NextDouble() * canvasWidth;
+            y = random.NextDouble() * canvasHeight;
         }
 
         public void Start()
@@ -47,6 +61,9 @@ namespace SeaSharp_UI.Entities
             foodImage.Width = this.entitySize;
 
             mainCanvas.Children.Add(foodImage);
+
+            Canvas.SetTop(foodImage, y);
+            Canvas.SetLeft(foodImage, x);
 
         }
 
