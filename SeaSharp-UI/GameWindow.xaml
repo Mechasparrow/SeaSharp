@@ -19,6 +19,6 @@
 
             </TextBlock>
         </Grid>
-        <Canvas Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,50,0,0" VerticalAlignment="Stretch"/>
+        <Canvas Loaded="MainCanvas_Loaded"  Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,50,0,0" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>

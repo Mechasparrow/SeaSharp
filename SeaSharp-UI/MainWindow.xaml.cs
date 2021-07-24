@@ -57,7 +57,7 @@ namespace SeaSharp_UI
             gameWindow.Left = oldLeftX;
             gameWindow.Top = oldTopY;
 
-            App.Current.MainWindow = gameWindow;
+            Application.Current.MainWindow = gameWindow;
 
             this.Close();
             gameWindow.Show();

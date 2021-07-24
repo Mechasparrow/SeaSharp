@@ -21,6 +21,7 @@ namespace SeaSharp_UI
     public partial class GameWindow : Window
     {
         private Creature creature = null;
+        private Random rnd = new Random();
 
         public GameWindow(string selectedCreature)
         {
@@ -28,10 +29,62 @@ namespace SeaSharp_UI
 
             creature = new Creature(Dispatcher, MainCanvas);
             creature.PropertyChanged += HandleCreatureUpdate;
-
             creature.Name = selectedCreature;
+        }
 
-            creature.Start();
+        public void RenderSea()
+        {
+            double canvasWidth = MainCanvas.ActualWidth;
+            double canvasHeight = MainCanvas.ActualHeight;
+
+            List<Image> imageTiles = new List<Image>();
+            
+            string[] oceanTileNames =
+            {
+                "ocean00",
+                "ocean01"
+            };
+
+            double[] rotations =
+            {
+                0,
+                90,
+                180,
+                270
+            };
+
+            int tilingSize = 64;
+
+            int tilingX = (int) Math.Ceiling(canvasWidth / tilingSize);
+            int tilingY = (int)Math.Ceiling(canvasHeight / tilingSize);
+
+            Console.WriteLine($"X Tiles: {tilingX}, Y tiles: {tilingY}");
+
+            for (int y = 0; y < tilingY; y++)
+            {
+                double tileYOffset = y * (tilingSize-1);
+
+                for (int x = 0; x < tilingX; x++)
+                {
+                    double tileXOffset = x * tilingSize;
+
+                    int occeanIdx = rnd.Next(oceanTileNames.Length);
+                    string oceanName = oceanTileNames[occeanIdx];
+
+
+                    int rotationIdx = rnd.Next(rotations.Length);
+                    double rotation = rotations[rotationIdx];
+
+                    Image seaTile = new Image();
+                    seaTile.Source = ImageHelper.LoadBitmapImage($"{oceanName}.png", tilingSize, rotation);
+                    seaTile.Width = tilingSize;
+
+                    MainCanvas.Children.Add(seaTile);
+
+                    Canvas.SetLeft(seaTile, tileXOffset);
+                    Canvas.SetTop(seaTile, tileYOffset);
+                }
+            }
         }
 
         public void HandleCreatureUpdate(object sender, PropertyChangedEventArgs e)
@@ -79,6 +132,13 @@ namespace SeaSharp_UI
             {
                 creature.Shutdown();
             }
+        }
+
+        private void MainCanvas_Loaded(object sender, RoutedEventArgs e)
+        {
+            RenderSea();
+
+            creature.Start();
         }
     }
 }
