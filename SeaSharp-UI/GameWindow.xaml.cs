@@ -30,7 +30,7 @@ namespace SeaSharp_UI
         {
             InitializeComponent();
 
-            creature = new Creature(Dispatcher, MainCanvas);
+            creature = new Creature(Application.Current.Dispatcher, MainCanvas);
             creature.PropertyChanged += HandleCreatureUpdate;
             creature.Name = selectedCreature;
         }

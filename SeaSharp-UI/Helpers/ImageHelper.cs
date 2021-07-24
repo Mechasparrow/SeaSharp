@@ -40,5 +40,26 @@ namespace SeaSharp_UI.Helpers
 
             return transformedBitmap;
         }
+
+        public static BitmapSource LoadBitmapImage(string path, int decodeWidth, bool flipped)
+        {
+            BitmapSource loadedBitmap = LoadBitmapImage(path, decodeWidth);
+
+            if (!flipped)
+            {
+                return loadedBitmap;
+            }
+
+            TransformedBitmap transformedBitmap = new TransformedBitmap();
+
+            transformedBitmap.BeginInit();
+            transformedBitmap.Source = loadedBitmap;
+            ScaleTransform transform = new ScaleTransform();
+            transform.ScaleX = -1;
+            transformedBitmap.Transform = transform;
+            transformedBitmap.EndInit();
+
+            return transformedBitmap;
+        }
     }
 }

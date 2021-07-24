@@ -21,10 +21,10 @@ namespace SeaSharp_UI.Entities
         protected Dispatcher dispatcher;
         protected Canvas mainCanvas;
 
-        protected int x;
-        protected int y;
+        protected double x;
+        protected double y;
 
-        public int X
+        public double X
         {
             get
             {
@@ -36,7 +36,7 @@ namespace SeaSharp_UI.Entities
             }
         }
 
-        public int Y
+        public double Y
         {
             get
             {
@@ -71,7 +71,7 @@ namespace SeaSharp_UI.Entities
             }
         }
 
-        protected virtual void UpdateLocation(int newX, int newY)
+        protected virtual void UpdateLocation(double newX, double newY)
         {
             x = newX;
             y = newY;
