@@ -7,17 +7,15 @@ using System.Windows.Controls;
 using System.Windows.Threading;
 
 using SeaSharp_UI.Helpers;
+using SeaSharp_UI.WorldEntities;
 
 namespace SeaSharp_UI.Entities
 {
-    class Food
+    class Food : AbstractEntity
     {
         private Dispatcher dispatcher;
-        private Canvas mainCanvas;
         private Image foodImage;
 
-        private int x;
-        private int y;
         private int nutritionalValue;
 
 
@@ -33,45 +31,29 @@ namespace SeaSharp_UI.Entities
             }
         }
 
-        public int X { 
-            get
-            {
-                return x;
-            } 
-            set
-            {
-                x = value;        
-            }
-        }
-
-        public int Y
-        {
-            get
-            {
-                return y;
-            }
-            set
-            {
-                y = value;
-            }
-        }
-
         public Food(Dispatcher dispatcher, Canvas mainCanvas)
         {
             this.dispatcher = dispatcher;
             this.mainCanvas = mainCanvas;
+
+            this.entitySize = 56;
         }
 
         public void Start()
         {
-            int foodSize = 56;
             foodImage = new Image();
             string foodName = "food";
             foodImage.Source = ImageHelper.LoadBitmapImage($"{foodName}.png", 256);
-            foodImage.Width = foodSize;
+            foodImage.Width = this.entitySize;
 
             mainCanvas.Children.Add(foodImage);
 
+        }
+
+        public override void Destroy()
+        {
+            mainCanvas.Children.Remove(foodImage);
+            base.Destroy();
         }
     }
 }

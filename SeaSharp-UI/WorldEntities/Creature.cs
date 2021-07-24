@@ -11,6 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using SeaSharp_UI.Helpers;
+using SeaSharp_UI.WorldEntities;
 
 namespace SeaSharp_UI.Entities
 {
@@ -28,7 +29,8 @@ namespace SeaSharp_UI.Entities
 
     enum CreatureState
     {
-        MOVING_WITH_NO_PURPOSE
+        MOVING_WITH_NO_PURPOSE,
+        HEADING_TOWARDS_FOOD
     }
 
     class Creature : AbstractCreature
@@ -38,28 +40,39 @@ namespace SeaSharp_UI.Entities
         
         private bool paused = false;
 
-        private Image creatureImage = null;
-
         private Velocity velocity = new Velocity();
-        
+
+        public AbstractEntity targetingEntity = null;
+
         private CreatureState creatureState = CreatureState.MOVING_WITH_NO_PURPOSE;
+
+        private Image creatureImage = null;
 
         private readonly int creatureSize = 128;
 
         private double timeElapsed = 0.0;
         private double timeThreshold = 1.0;
-
         private int threadTickTime = 100;
 
         private Random random = new Random();
+
+        public AbstractEntity TargetingEntity
+        {
+            get
+            {
+                return this.targetingEntity;
+            }
+        }
 
         public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas) { }
 
         public Creature(string creatureName, Dispatcher dispatcher, Canvas mainCanvas)
         {
-            this.creatureName = creatureName;
+            this.name = creatureName;
             this.dispatcher = dispatcher;
             this.mainCanvas = mainCanvas;
+
+            this.entitySize = creatureSize;
 
             creatureThread = new Thread(CreatureLoop);
         }
@@ -124,6 +137,20 @@ namespace SeaSharp_UI.Entities
                 double newDx = velocity.dx;
 
                 DirectionFlipUpdate(oldDx, newDx);
+
+                dispatcher.Invoke(() =>
+                {
+                    UpdateLocation(x + velocity.dx, y + velocity.dy);
+                });
+            }else if (creatureState == CreatureState.HEADING_TOWARDS_FOOD)
+            {
+                dispatcher.Invoke(() =>
+                {
+                    canvasWidth = mainCanvas.ActualWidth;
+                    canvasHeight = mainCanvas.ActualHeight;
+                });
+
+                CanvasBoundsCheck(canvasWidth, canvasHeight);
 
                 dispatcher.Invoke(() =>
                 {
@@ -227,8 +254,43 @@ namespace SeaSharp_UI.Entities
             return selectedVelocity;
         }
 
-        public void Shutdown()
+        public override void HandleWorldUpdate(object sender, WorldEventArgs worldEventArgs)
         {
+            base.HandleWorldUpdate(sender, worldEventArgs);
+
+            World world = worldEventArgs.OccuringWorld;
+
+            switch (worldEventArgs.WorldEventType)
+            {
+                case WorldEventType.ENTITY_CHANGE:
+                    List<Food> food = world.FindFood();
+
+                    if (food.Count > 0)
+                    {
+                        AbstractEntity foodEntity = food.First();
+                        creatureState = CreatureState.HEADING_TOWARDS_FOOD;
+                        targetingEntity = foodEntity;
+                        velocity = velocityTowardsTarget(foodEntity.X, foodEntity.Y, 10);
+                    }
+                    break;
+                case WorldEventType.ENTITY_COLLISION:
+                    List<AbstractEntity> affectedEntities = worldEventArgs.affectedEntites;
+                    
+                    if (affectedEntities.Contains(this) && affectedEntities.Contains(targetingEntity))
+                    {
+                        world.RemoveEntity(targetingEntity);
+                    }
+
+                    break;
+            }
+
+            
+        }
+
+        public override void Destroy()
+        {
+            mainCanvas.Children.Remove(creatureImage);
+
             if (creatureThread != null)
             {
 

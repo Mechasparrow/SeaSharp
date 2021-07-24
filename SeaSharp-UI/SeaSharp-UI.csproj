@@ -69,6 +69,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="WorldEntities\AbstractEntity.cs" />
     <Compile Include="WorldEntities\Creature.cs" />
     <Compile Include="WorldEntities\Food.cs" />
     <Compile Include="GameWindow.xaml.cs">

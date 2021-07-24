@@ -23,16 +23,22 @@ namespace SeaSharp_UI
     /// </summary>
     public partial class GameWindow : Window
     {
+        private World world = null;
         private Creature creature = null;
         private Random rnd = new Random();
+
 
         public GameWindow(string selectedCreature)
         {
             InitializeComponent();
 
+            world = new World();
+
             creature = new Creature(Application.Current.Dispatcher, MainCanvas);
             creature.PropertyChanged += HandleCreatureUpdate;
             creature.Name = selectedCreature;
+
+            world.AddEntity(creature);
         }
 
         public void RenderSea()
@@ -61,7 +67,6 @@ namespace SeaSharp_UI
             int tilingX = (int) Math.Ceiling(canvasWidth / tilingSize);
             int tilingY = (int)Math.Ceiling(canvasHeight / tilingSize);
 
-            Console.WriteLine($"X Tiles: {tilingX}, Y tiles: {tilingY}");
 
             for (int y = 0; y < tilingY; y++)
             {
@@ -109,7 +114,7 @@ namespace SeaSharp_UI
         {
             if (creature != null)
             {
-                creature.Shutdown();
+                creature.Destroy();
             }
 
             Window mainWindow = new MainWindow();
@@ -133,7 +138,7 @@ namespace SeaSharp_UI
         {
             if (creature != null)
             {
-                creature.Shutdown();
+                creature.Destroy();
             }
         }
 
@@ -145,6 +150,8 @@ namespace SeaSharp_UI
 
             Food food = new Food(Dispatcher, MainCanvas);
             food.Start();
+
+            world.AddEntity(food);
 
         }
     }
