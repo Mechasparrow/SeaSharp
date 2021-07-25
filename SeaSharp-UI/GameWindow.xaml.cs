@@ -107,6 +107,9 @@ namespace SeaSharp_UI
                 case "Hunger":
                     renderFoodbar(creature.Hunger);
                     break;
+                case "Thirst":
+                    renderDrinkbar(creature.Thirst);
+                    break;
                 case "Day":
                     renderDaysPassed(creature.DaysPassed);
                     break;
@@ -116,6 +119,12 @@ namespace SeaSharp_UI
         private void renderDaysPassed(int days)
         {
             TimeText.Text = $"Days {creature.DaysPassed}";
+        }
+
+
+        private void renderDrinkbar(double thirst)
+        {
+            CreatureThirstBar.Value = thirst;
         }
 
         private void renderFoodbar(double hunger)
@@ -181,6 +190,16 @@ namespace SeaSharp_UI
 
 
             world.AddEntity(food);
+        }
+
+        private void GiveWaterCreatureButtonClick(object sender, RoutedEventArgs e)
+        {
+            Drink drink = new Drink(Dispatcher, MainCanvas);
+            drink.SetRandomLocation();
+            drink.Start();
+
+
+            world.AddEntity(drink);
         }
     }
 }

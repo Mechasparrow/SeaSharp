@@ -1,4 +1,4 @@
-﻿using SeaSharp_UI.WorldEntities;
+﻿
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -17,7 +17,6 @@ namespace SeaSharp_UI.Entities
     //^ This should help isolate the Model, View, and Controller
     abstract class AbstractCreature : AbstractEntity 
     {
-        protected Dispatcher dispatcher;
         
         protected virtual void UpdateLocation(double newX, double newY)
         {

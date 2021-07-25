@@ -11,7 +11,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 
 using SeaSharp_UI.Helpers;
-using SeaSharp_UI.WorldEntities;
+using SeaSharp_UI.Entities;
 
 namespace SeaSharp_UI.Entities
 {
@@ -42,7 +42,7 @@ namespace SeaSharp_UI.Entities
 
         private Velocity velocity = new Velocity();
 
-        public AbstractEntity targetingEntity = null;
+        public List<AbstractEntity> targetingEntities = new List<AbstractEntity>();
 
         private CreatureState creatureState = CreatureState.MOVING_WITH_NO_PURPOSE;
 
@@ -59,6 +59,9 @@ namespace SeaSharp_UI.Entities
         private int daysPassed = 0;
 
         private double hunger = 0.0;
+        private double thirst = 0.0;
+
+
 
         private Random random = new Random();
 
@@ -66,7 +69,7 @@ namespace SeaSharp_UI.Entities
         {
             get
             {
-                return this.targetingEntity;
+                return this.targetingEntities.FirstOrDefault();
             }
         }
 
@@ -75,6 +78,14 @@ namespace SeaSharp_UI.Entities
             get
             {
                 return daysPassed;
+            }
+        }
+
+        public double Thirst
+        {
+            get
+            {
+                return thirst;
             }
         }
 
@@ -291,31 +302,59 @@ namespace SeaSharp_UI.Entities
             switch (worldEventArgs.WorldEventType)
             {
                 case WorldEventType.ENTITY_CHANGE:
-                    List<Food> food = world.FindFood();
+                    List<ConsumableEntity> consumableEntities = world.FindConsumableEntities();
 
-                    if (food.Count > 0)
+                    if (consumableEntities.Count > 0)
                     {
-                        AbstractEntity foodEntity = food.First();
+                        AbstractEntity consumableEntity = consumableEntities.First();
                         creatureState = CreatureState.HEADING_TOWARDS_FOOD;
-                        targetingEntity = foodEntity;
-                        velocity = velocityTowardsTarget(foodEntity.X, foodEntity.Y, 10);
+                        targetingEntities.Add(consumableEntity);
+                        velocity = velocityTowardsTarget(targetingEntities.First().X, targetingEntities.First().Y, 10);
                     }
                     break;
                 case WorldEventType.ENTITY_COLLISION:
                     List<AbstractEntity> affectedEntities = worldEventArgs.affectedEntites;
                     
-                    if (affectedEntities.Contains(this) && affectedEntities.Contains(targetingEntity))
+                    if (affectedEntities.Contains(this) && affectedEntities.Any(entity => targetingEntities.Contains(entity)))
                     {
+                        AbstractEntity targetingEntity = affectedEntities.First(entity => targetingEntities.Contains(entity));
+
+                        string updatingConsumableProperty;
+                        if (targetingEntity.GetType() == typeof(Food))
+                        {
+                            updatingConsumableProperty = "Hunger";
+                        }
+                        else
+                        {
+                            updatingConsumableProperty = "Thirst";
+                        }
+
                         world.RemoveEntity(targetingEntity);
-                        targetingEntity = null;
+                        targetingEntities.Remove(targetingEntity);
 
                         dispatcher.BeginInvoke(new Action(() =>
                         {
-                            hunger += 10;
-                            NotifyPropertyChanged("Hunger");
+                            switch (updatingConsumableProperty)
+                            {
+                                case "Hunger":
+                                    hunger = (hunger + 10) % 100;
+                                    break;
+                                case "Thirst":
+                                    thirst = (thirst + 10) % 100;
+                                    break;
+                            }
+
+                            NotifyPropertyChanged(updatingConsumableProperty);
                         }));
 
-                        creatureState = CreatureState.MOVING_WITH_NO_PURPOSE;
+                        if (targetingEntities.Count > 0)
+                        {
+                            velocity = velocityTowardsTarget(targetingEntities.First().X, targetingEntities.First().Y, 10);
+                        }
+                        else
+                        {
+                            creatureState = CreatureState.MOVING_WITH_NO_PURPOSE;
+                        }
                     }
 
                     break;

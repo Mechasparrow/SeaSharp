@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using SeaSharp_UI.Entities;
-using SeaSharp_UI.WorldEntities;
 
 namespace SeaSharp_UI
 {
@@ -80,7 +79,7 @@ namespace SeaSharp_UI
             if (sender.GetType() == typeof(Creature))
             {
                 Creature creature = sender as Creature;
-                AbstractEntity targetingEntity = creature.targetingEntity;
+                AbstractEntity targetingEntity = creature.TargetingEntity;
 
                 if (targetingEntity == null)
                 {
@@ -113,13 +112,11 @@ namespace SeaSharp_UI
         }
 
 
-        public List<Food> FindFood()
+        public List<ConsumableEntity> FindConsumableEntities()
         {
-            Type foodType = typeof (Food);
-
             return entities
-                .Where(entity => entity.GetType() == foodType)
-                .Select(entity => entity as Food)
+                .Where(entity => entity.GetType().BaseType == typeof(ConsumableEntity))
+                .Select(entity => entity as ConsumableEntity)
                 .ToList();
         }
 

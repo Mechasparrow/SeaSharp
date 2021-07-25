@@ -6,12 +6,14 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Controls;
+using System.Windows.Threading;
 
-namespace SeaSharp_UI.WorldEntities
+namespace SeaSharp_UI.Entities
 {
     abstract class AbstractEntity : INotifyPropertyChanged
     {
         protected Canvas mainCanvas;
+        protected Dispatcher dispatcher;
 
         protected string name;
 

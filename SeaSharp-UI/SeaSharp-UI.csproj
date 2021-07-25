@@ -64,14 +64,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="WorldEntities\AbstractCreature.cs" />
+    <Compile Include="Entities\AbstractCreature.cs" />
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WorldEntities\AbstractEntity.cs" />
-    <Compile Include="WorldEntities\Creature.cs" />
-    <Compile Include="WorldEntities\Food.cs" />
+    <Compile Include="Entities\AbstractEntity.cs" />
+    <Compile Include="Entities\ConsumableEntity.cs" />
+    <Compile Include="Entities\Creature.cs" />
+    <Compile Include="Entities\Drink.cs" />
+    <Compile Include="Entities\Food.cs" />
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
