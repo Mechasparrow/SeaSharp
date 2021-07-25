@@ -58,7 +58,7 @@ namespace SeaSharp_UI.Entities
         private int threadTickTime = 100;
 
         private int daysPassed = 0;
-        private double hunger = 50.0;
+        private double hunger = 100.0;
         private double thirst = 100.0;
 
         private Random random = new Random();
