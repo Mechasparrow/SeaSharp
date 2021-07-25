@@ -19,12 +19,12 @@
             <Button Margin="0,10,0,10" Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center" Content="Play with different creature"/>
             <StackPanel  Grid.Column="1">
                 <TextBlock FontSize="24" TextAlignment="Center" x:Name="GameTitle"><Run Text="Creature"/></TextBlock>
-                <TextBlock Name="TimeText"  TextAlignment="Center"  Text="Day 1"></TextBlock>
+                <TextBlock FontSize="20" Name="TimeText"  TextAlignment="Center"  Text="Day 1"></TextBlock>
             </StackPanel>
             <StackPanel Grid.Column="2" >
                 <DockPanel VerticalAlignment="Center" >
                     <TextBlock Margin="0,0,10,0">Hunger:</TextBlock>
-                    <ProgressBar Margin="0,0,10,0" x:Name="CreatureHungerBar" VerticalAlignment="Top" Value="0.0" Height="20"/>
+                    <ProgressBar Margin="0,0,10,0" x:Name="CreatureHungerBar" VerticalAlignment="Top" Value="100.0" Height="20"/>
                 </DockPanel>
                 
 
@@ -35,7 +35,7 @@
 
                 <DockPanel Margin="0,10,0,0" VerticalAlignment="Center" >
                     <TextBlock Margin="0,0,10,0">Thirst:</TextBlock>
-                    <ProgressBar Margin="0,0,10,0" x:Name="CreatureThirstBar" VerticalAlignment="Top" Value="0.0" Height="20" Foreground="#FF3779C2"/>
+                    <ProgressBar Margin="0,0,10,0" x:Name="CreatureThirstBar" VerticalAlignment="Top" Value="100.0" Height="20" Foreground="#FF3779C2"/>
                 </DockPanel>
 
                 <Button Click="GiveWaterCreatureButtonClick" Margin="0,10,10,0" Content="Give Water" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" />

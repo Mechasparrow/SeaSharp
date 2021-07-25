@@ -96,11 +96,13 @@ namespace SeaSharp_UI
                 
                 if (collisionOccured)
                 {
+                    /*
                     Console.WriteLine($"Target X: {targetingEntity.X} Target Y: {targetingEntity.Y}");
                     Console.WriteLine($"Target size: {targetingEntity.EntitySize}");
 
                     Console.WriteLine($"Creature X: {creature.X}, Creature Y: {creature.Y}");
                     Console.WriteLine($"Creature Size: {creature.EntitySize}");
+                    */
 
                     EmitWorldUpdate(WorldEventType.ENTITY_COLLISION, new List<AbstractEntity>()
                     {

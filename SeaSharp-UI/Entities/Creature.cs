@@ -25,6 +25,11 @@ namespace SeaSharp_UI.Entities
             this.dx = dx;
             this.dy = dy;
         }
+
+        public override string ToString()
+        {
+            return $"X: {this.dx} Y: {this.dy}";
+        }
     }
 
     enum CreatureState
@@ -42,26 +47,19 @@ namespace SeaSharp_UI.Entities
 
         private Velocity velocity = new Velocity();
 
-        public List<AbstractEntity> targetingEntities = new List<AbstractEntity>();
+        public AbstractEntity currentTarget = null;
 
         private CreatureState creatureState = CreatureState.MOVING_WITH_NO_PURPOSE;
 
         private Image creatureImage = null;
 
         private readonly int creatureSize = 128;
-
-        private double timeElapsed = 0.0;
-        private double timeThreshold = 1.0;
+        
         private int threadTickTime = 100;
 
-        private double timeLivedElapsed = 0.0;
-        private double dayThreshold = 10.0;
         private int daysPassed = 0;
-
-        private double hunger = 0.0;
-        private double thirst = 0.0;
-
-
+        private double hunger = 100.0;
+        private double thirst = 100.0;
 
         private Random random = new Random();
 
@@ -69,7 +67,7 @@ namespace SeaSharp_UI.Entities
         {
             get
             {
-                return this.targetingEntities.FirstOrDefault();
+                return currentTarget;
             }
         }
 
@@ -100,6 +98,8 @@ namespace SeaSharp_UI.Entities
         private double canvasWidth = 0;
         private double canvasHeight = 0;
 
+        bool updateDirection = false;
+
         public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas) { }
 
         public Creature(string creatureName, Dispatcher dispatcher, Canvas mainCanvas)
@@ -111,6 +111,32 @@ namespace SeaSharp_UI.Entities
             this.entitySize = creatureSize;
 
             creatureThread = new Thread(CreatureLoop);
+        }
+
+        private void UpdateMovementTick(object state)
+        {
+            updateDirection = true;
+        }
+
+        public void UpdateDayTick(object state)
+        {
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                daysPassed += 1;
+                NotifyPropertyChanged("Day");
+            }));
+        }
+
+        public void UpdateConsumables(object state)
+        {
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                hunger = Math.Max(hunger - 10.0, 0);
+                thirst = Math.Max(thirst - 10.0, 0);
+
+                NotifyPropertyChanged("Hunger");
+                NotifyPropertyChanged("Thirst");
+            }));
         }
 
         public void Start()
@@ -147,28 +173,6 @@ namespace SeaSharp_UI.Entities
 
         private void CreatureLogic()
         {
-            bool updateDirection = false;
-
-            timeElapsed += threadTickTime / 1000.0;
-            timeLivedElapsed += threadTickTime / 1000.0;
-
-            if (timeLivedElapsed >= dayThreshold)
-            {
-                timeLivedElapsed = 0;
-
-                dispatcher.BeginInvoke(new Action(() =>
-               {
-                   daysPassed += 1;
-                   NotifyPropertyChanged("Day");
-               }));
-            }
-
-            if (timeElapsed >= timeThreshold)
-            {
-                updateDirection = true;
-                timeElapsed = 0;
-            }
-
             if (creatureState == CreatureState.MOVING_WITH_NO_PURPOSE)
             {
 
@@ -177,6 +181,7 @@ namespace SeaSharp_UI.Entities
                 if (updateDirection)
                 {
                     velocity = GenerateRandomVelocity();
+                    updateDirection = false;
                 }
 
                 CanvasBoundsCheck(canvasWidth, canvasHeight);
@@ -201,6 +206,11 @@ namespace SeaSharp_UI.Entities
 
         private void CreatureLoop()
         {
+
+            var movementTimer = new Timer(UpdateMovementTick, null, 0, 1000);
+            var consumableTimer = new Timer(UpdateConsumables, null, 0, 2000);
+            var dayTimer = new Timer(UpdateDayTick, null, 0, 5000);
+
             while (true)
             {
                 if (paused)
@@ -299,25 +309,35 @@ namespace SeaSharp_UI.Entities
 
             World world = worldEventArgs.OccuringWorld;
 
+
+            List<ConsumableEntity> consumableEntities;
+
             switch (worldEventArgs.WorldEventType)
             {
                 case WorldEventType.ENTITY_CHANGE:
-                    List<ConsumableEntity> consumableEntities = world.FindConsumableEntities();
+                    consumableEntities = world.FindConsumableEntities();
+
 
                     if (consumableEntities.Count > 0)
                     {
-                        AbstractEntity consumableEntity = consumableEntities.First();
                         creatureState = CreatureState.HEADING_TOWARDS_FOOD;
-                        targetingEntities.Add(consumableEntity);
-                        velocity = velocityTowardsTarget(targetingEntities.First().X, targetingEntities.First().Y, 10);
+
+                        if (currentTarget == null)
+                        {
+                            AbstractEntity consumableEntity = consumableEntities.OrderBy((entity) => EntityDistance(entity, this)).First();
+                            currentTarget = consumableEntity;
+
+                            velocity = velocityTowardsTarget(currentTarget.X, currentTarget.Y, 10);
+                        }
+
                     }
                     break;
                 case WorldEventType.ENTITY_COLLISION:
                     List<AbstractEntity> affectedEntities = worldEventArgs.affectedEntites;
                     
-                    if (affectedEntities.Contains(this) && affectedEntities.Any(entity => targetingEntities.Contains(entity)))
+                    if (affectedEntities.Contains(this) && affectedEntities.Contains(currentTarget))
                     {
-                        AbstractEntity targetingEntity = affectedEntities.First(entity => targetingEntities.Contains(entity));
+                        AbstractEntity targetingEntity = affectedEntities.First(entity => entity == currentTarget);
 
                         string updatingConsumableProperty;
                         if (targetingEntity.GetType() == typeof(Food))
@@ -330,26 +350,37 @@ namespace SeaSharp_UI.Entities
                         }
 
                         world.RemoveEntity(targetingEntity);
-                        targetingEntities.Remove(targetingEntity);
+                        currentTarget = null;
 
                         dispatcher.BeginInvoke(new Action(() =>
                         {
                             switch (updatingConsumableProperty)
                             {
                                 case "Hunger":
-                                    hunger = (hunger + 10) % 100;
+                                    hunger = Math.Min(hunger + 10,100);
+                                    Console.WriteLine("Hunger + 10");
                                     break;
                                 case "Thirst":
-                                    thirst = (thirst + 10) % 100;
+                                    thirst = Math.Min(thirst + 10, 100);
+                                    Console.WriteLine("Thirst + 10");
                                     break;
                             }
 
                             NotifyPropertyChanged(updatingConsumableProperty);
                         }));
 
-                        if (targetingEntities.Count > 0)
+
+
+                        consumableEntities = world.FindConsumableEntities();
+                        if (consumableEntities.Count > 0)
                         {
-                            velocity = velocityTowardsTarget(targetingEntities.First().X, targetingEntities.First().Y, 10);
+                            if (currentTarget == null)
+                            {
+                                currentTarget = consumableEntities.OrderBy((entity) => EntityDistance(entity, this)).First();
+
+                                velocity = velocityTowardsTarget(currentTarget.X, currentTarget.Y, 10);
+                            }
+
                         }
                         else
                         {

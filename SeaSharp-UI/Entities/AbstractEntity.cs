@@ -77,6 +77,14 @@ namespace SeaSharp_UI.Entities
             }
         }
 
+        public static double EntityDistance(AbstractEntity entity, AbstractEntity otherEntity)
+        {
+            double dx = entity.x - otherEntity.x;
+            double dy = entity.y - otherEntity.y;
+
+            return Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
+        }
+
         public virtual void HandleWorldUpdate(object sender, WorldEventArgs worldEventArgs)
         {
 
