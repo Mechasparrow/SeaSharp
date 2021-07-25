@@ -110,10 +110,21 @@ namespace SeaSharp_UI
                 case "Thirst":
                     renderDrinkbar(creature.Thirst);
                     break;
+                case "Death":
+                    renderDeathDialog(creature.DaysPassed);
+                    break;
                 case "Day":
                     renderDaysPassed(creature.DaysPassed);
                     break;
             }
+        }
+
+        private void renderDeathDialog(int days)
+        {
+            creature.Destroy();
+            MessageBox.Show($"Your pet has passed out after {days} Days", "Pet fainted", MessageBoxButton.OK, MessageBoxImage.Exclamation);
+
+            GoBackToCharacterSelect(null, null);
         }
 
         private void renderDaysPassed(int days)

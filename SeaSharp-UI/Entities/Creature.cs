@@ -58,7 +58,7 @@ namespace SeaSharp_UI.Entities
         private int threadTickTime = 100;
 
         private int daysPassed = 0;
-        private double hunger = 100.0;
+        private double hunger = 50.0;
         private double thirst = 100.0;
 
         private Random random = new Random();
@@ -100,6 +100,10 @@ namespace SeaSharp_UI.Entities
 
         bool updateDirection = false;
 
+        Timer movementTimer;
+        Timer consumableTimer;
+        Timer dayTimer;
+
         public Creature(Dispatcher dispatcher, Canvas mainCanvas) : this("", dispatcher, mainCanvas) { }
 
         public Creature(string creatureName, Dispatcher dispatcher, Canvas mainCanvas)
@@ -131,11 +135,18 @@ namespace SeaSharp_UI.Entities
         {
             dispatcher.BeginInvoke(new Action(() =>
             {
+               
+
                 hunger = Math.Max(hunger - 10.0, 0);
                 thirst = Math.Max(thirst - 10.0, 0);
 
                 NotifyPropertyChanged("Hunger");
                 NotifyPropertyChanged("Thirst");
+
+                if (hunger <= 0 || thirst <= 0)
+                {
+                    NotifyPropertyChanged("Death");
+                }
             }));
         }
 
@@ -207,9 +218,9 @@ namespace SeaSharp_UI.Entities
         private void CreatureLoop()
         {
 
-            var movementTimer = new Timer(UpdateMovementTick, null, 0, 1000);
-            var consumableTimer = new Timer(UpdateConsumables, null, 0, 2000);
-            var dayTimer = new Timer(UpdateDayTick, null, 0, 5000);
+            movementTimer = new Timer(UpdateMovementTick, null, 0, 1000);
+            consumableTimer = new Timer(UpdateConsumables, null, 1000, 2000);
+            dayTimer = new Timer(UpdateDayTick, null, 0, 5000);
 
             while (true)
             {
@@ -358,18 +369,14 @@ namespace SeaSharp_UI.Entities
                             {
                                 case "Hunger":
                                     hunger = Math.Min(hunger + 10,100);
-                                    Console.WriteLine("Hunger + 10");
                                     break;
                                 case "Thirst":
                                     thirst = Math.Min(thirst + 10, 100);
-                                    Console.WriteLine("Thirst + 10");
                                     break;
                             }
 
                             NotifyPropertyChanged(updatingConsumableProperty);
                         }));
-
-
 
                         consumableEntities = world.FindConsumableEntities();
                         if (consumableEntities.Count > 0)
@@ -397,6 +404,10 @@ namespace SeaSharp_UI.Entities
         public override void Destroy()
         {
             mainCanvas.Children.Remove(creatureImage);
+
+            movementTimer.Dispose();
+            dayTimer.Dispose();
+            consumableTimer.Dispose();
 
             if (creatureThread != null)
             {
