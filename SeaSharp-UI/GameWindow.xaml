@@ -10,37 +10,75 @@
         mc:Ignorable="d"
         Title="GameWindow" Height="450" Width="800">
     <Grid>
-        <Grid Height="120" VerticalAlignment="Top" HorizontalAlignment="Stretch">
+        <Grid Height="130" VerticalAlignment="Top" HorizontalAlignment="Stretch" Margin="0,0,-0.4,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="105*"></ColumnDefinition>
-                <ColumnDefinition Width="193*"></ColumnDefinition>
-                <ColumnDefinition Width="99*"></ColumnDefinition>
+                <ColumnDefinition Width="263*"></ColumnDefinition>
+                <ColumnDefinition Width="530*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <Button Margin="0,10,0,10" Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center" Content="Play with different creature"/>
-            <StackPanel  Grid.Column="1">
-                <TextBlock FontSize="24" TextAlignment="Center" x:Name="GameTitle"><Run Text="Creature"/></TextBlock>
-                <TextBlock FontSize="20" Name="TimeText"  TextAlignment="Center"  Text="Day 1"></TextBlock>
-            </StackPanel>
-            <StackPanel Grid.Column="2" >
-                <DockPanel VerticalAlignment="Center" >
-                    <TextBlock Margin="0,0,10,0">Hunger:</TextBlock>
-                    <ProgressBar Margin="0,0,10,0" x:Name="CreatureHungerBar" VerticalAlignment="Top" Value="100.0" Height="20"/>
-                </DockPanel>
-                
+            <Button  Padding="10,10,10,10" Margin="0,20,0,20" Click="GoBackToCharacterSelect" Grid.Column="0" HorizontalAlignment="Center">
+                <TextBlock Text="Play with different creature" TextWrapping="Wrap" TextAlignment="Center"/>
+            </Button>
+            <StackPanel Margin="5.8,0,-0.4,0" Grid.Column="1">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
+
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Grid.Column="0">
+                        <TextBlock FontSize="24" TextAlignment="Center" x:Name="GameTitle"><Run Text="Creature"/></TextBlock>
+                        <TextBlock FontSize="20" Name="TimeText"  TextAlignment="Center"  Text="Day 1"></TextBlock>
+                    </StackPanel>
+                    <DockPanel VerticalAlignment="Center" Grid.Column="1">
+                        <Image Source="watercoin.png" Height="50" Width="50" />
+                        <TextBlock Width="121" VerticalAlignment="Center" FontSize="20">Money: 1000</TextBlock>
+
+                        <Button Margin="10,10,10,10" >Go to Work</Button>
+                    </DockPanel>
+                </Grid>
 
 
-                
-                <Button Margin="0,10,10,0" Content="Feed" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Click="FeedCreatureButtonClick" />
 
+                <Grid Height="80">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition></ColumnDefinition>
 
-                <DockPanel Margin="0,10,0,0" VerticalAlignment="Center" >
-                    <TextBlock Margin="0,0,10,0">Thirst:</TextBlock>
-                    <ProgressBar Margin="0,0,10,0" x:Name="CreatureThirstBar" VerticalAlignment="Top" Value="100.0" Height="20" Foreground="#FF3779C2"/>
-                </DockPanel>
+                        <ColumnDefinition></ColumnDefinition>
 
-                <Button Click="GiveWaterCreatureButtonClick" Margin="0,10,10,0" Content="Give Water" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" />
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Grid.Column="0">
+                        <DockPanel Margin="0,10,0,0" VerticalAlignment="Center" >
+                            <TextBlock Margin="0,0,10,0">Hunger:</TextBlock>
+                            <ProgressBar Margin="0,0,10,0" x:Name="CreatureHungerBar" VerticalAlignment="Top" Value="100.0" Height="20"/>
+                        </DockPanel>
+
+                        <Button Margin="0,10,10,0" Content="Feed" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" Click="FeedCreatureButtonClick" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="1">
+                        <DockPanel Margin="0,10,0,0" VerticalAlignment="Center" >
+                            <TextBlock Margin="0,0,10,0">Thirst:</TextBlock>
+                            <ProgressBar Margin="0,0,10,0" x:Name="CreatureThirstBar" VerticalAlignment="Top" Value="100.0" Height="20" Foreground="#FF3779C2"/>
+                        </DockPanel>
+
+                        <Button Click="GiveWaterCreatureButtonClick" Margin="0,10,10,0" Content="Give Water" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" />
+
+                    </StackPanel>
+
+                    <StackPanel Grid.Column="2">
+                        <DockPanel Margin="0,10,0,0" VerticalAlignment="Center" >
+                            <TextBlock Margin="0,0,10,0">Play:</TextBlock>
+                            <ProgressBar Margin="0,0,10,0" x:Name="CreaturePlayBar" VerticalAlignment="Top" Value="100.0" Height="20" Foreground="#FFE57038" Background="White"/>
+                        </DockPanel>
+
+                        <Button Margin="0,10,10,0" Content="Play" HorizontalAlignment="Right" VerticalAlignment="Top" Width="75" />
+                    </StackPanel>
+
+                </Grid>
             </StackPanel>
         </Grid>
-        <Canvas Loaded="MainCanvas_Loaded"  Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,120,0,0" VerticalAlignment="Stretch"/>
+        <Canvas Loaded="MainCanvas_Loaded"  Name="MainCanvas" HorizontalAlignment="Stretch" Margin="0,130,0,0" VerticalAlignment="Stretch"/>
     </Grid>
 </Window>
