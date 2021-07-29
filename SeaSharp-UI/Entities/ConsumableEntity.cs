@@ -13,6 +13,7 @@ namespace SeaSharp_UI.Entities
     {
 
         protected int nutritionalValue;
+        protected int consumableCost;
 
         protected Image consumableImage;
 
@@ -30,6 +31,8 @@ namespace SeaSharp_UI.Entities
 
             canvasWidth = mainCanvas.ActualWidth;
             canvasHeight = mainCanvas.ActualHeight;
+
+            consumableCost = 0;
         }
 
         public int NutritionalValue
@@ -41,6 +44,18 @@ namespace SeaSharp_UI.Entities
             set
             {
                 nutritionalValue = value;
+            }
+        }
+
+        public int ConsumableCost
+        {
+            get
+            {
+                return consumableCost;
+            }
+            set
+            {
+                consumableCost = value;
             }
         }
 
@@ -60,6 +75,23 @@ namespace SeaSharp_UI.Entities
 
             Canvas.SetTop(consumableImage, y);
             Canvas.SetLeft(consumableImage, x);
+        }
+
+        public void PayForConsumable(MoneyManager moneyManager)
+        {
+            moneyManager.Money -= consumableCost;
+        }
+
+        public bool CanConsumeWithMoney(MoneyManager moneyManager)
+        {
+            if (moneyManager.Money - consumableCost >= 0)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         public override void Destroy()

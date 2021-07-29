@@ -256,20 +256,44 @@ namespace SeaSharp_UI
         {
             Food food = new Food(Dispatcher, MainCanvas);
             food.SetRandomLocation();
-            food.Start();
 
+            food.ConsumableCost = 5;
 
-            world.AddEntity(food);
+            if (food.CanConsumeWithMoney(moneyManager))
+            {
+                food.PayForConsumable(moneyManager);
+                food.Start();
+                world.AddEntity(food);
+            }
         }
 
         private void GiveWaterCreatureButtonClick(object sender, RoutedEventArgs e)
         {
             Drink drink = new Drink(Dispatcher, MainCanvas);
             drink.SetRandomLocation();
-            drink.Start();
 
+            drink.ConsumableCost = 5;
 
-            world.AddEntity(drink);
+            if (drink.CanConsumeWithMoney(moneyManager))
+            {
+                drink.PayForConsumable(moneyManager);
+                drink.Start();
+                world.AddEntity(drink);
+            }
+        }
+        private void PlayCreatureButton_Click(object sender, RoutedEventArgs e)
+        {
+            Ball ball = new Ball(Dispatcher, MainCanvas);
+            ball.SetRandomLocation();
+
+            ball.ConsumableCost = 5;
+
+            if (ball.CanConsumeWithMoney(moneyManager))
+            {
+                ball.PayForConsumable(moneyManager);
+                ball.Start();
+                world.AddEntity(ball);
+            }
         }
 
         private void GoToWorkButton_Click(object sender, RoutedEventArgs e)
@@ -277,13 +301,5 @@ namespace SeaSharp_UI
             GoToWorkWindow(sender, e);
         }
 
-        private void PlayCreatureButton_Click(object sender, RoutedEventArgs e)
-        {
-            Ball ball = new Ball(Dispatcher, MainCanvas);
-            ball.SetRandomLocation();
-            ball.Start();
-
-            world.AddEntity(ball);
-        }
     }
 }

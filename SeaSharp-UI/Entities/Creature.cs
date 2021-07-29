@@ -174,9 +174,9 @@ namespace SeaSharp_UI.Entities
         {
             dispatcher.BeginInvoke(new Action(() =>
             {
-                hunger = Math.Max(hunger - 10.0, 0);
-                thirst = Math.Max(thirst - 10.0, 0);
-                play = Math.Max(play - 10.0, 0);
+                hunger = Math.Max(hunger - 5.0, 0);
+                thirst = Math.Max(thirst - 5.0, 0);
+                play = Math.Max(play - 5.0, 0);
 
                 NotifyPropertyChanged("Hunger");
                 NotifyPropertyChanged("Thirst");
