@@ -55,6 +55,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Entities\Ball.cs" />
     <Compile Include="GoToWorkWindow.xaml.cs">
       <DependentUpon>GoToWorkWindow.xaml</DependentUpon>
     </Compile>

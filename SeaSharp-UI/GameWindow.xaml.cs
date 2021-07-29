@@ -31,15 +31,8 @@ namespace SeaSharp_UI
 
         private void InitGameState(Creature creature, MoneyManager moneyManager)
         {
-            this.creature = new Creature(Application.Current.Dispatcher, MainCanvas);
+            this.creature = creature.duplicateCreature(Application.Current.Dispatcher, MainCanvas);
             
-            this.creature.Name = creature.Name;
-
-            this.creature.DaysPassed = creature.DaysPassed;
-            this.creature.Hunger = creature.Hunger;
-            this.creature.Thirst = creature.Thirst;
-            this.creature.Play = creature.Play;
-
             this.creature.PropertyChanged += HandleCreatureUpdate;
             this.creature.PropertyRefresh();
             
@@ -143,6 +136,9 @@ namespace SeaSharp_UI
                 case "Thirst":
                     renderDrinkbar(creature.Thirst);
                     break;
+                case "Play":
+                    renderPlaybar(creature.Play);
+                    break;
                 case "Death":
                     renderDeathDialog(creature.DaysPassed);
                     break;
@@ -165,6 +161,10 @@ namespace SeaSharp_UI
             TimeText.Text = $"Days {creature.DaysPassed}";
         }
 
+        private void renderPlaybar(double play)
+        {
+            CreaturePlayBar.Value = play;
+        }
 
         private void renderDrinkbar(double thirst)
         {
@@ -275,6 +275,15 @@ namespace SeaSharp_UI
         private void GoToWorkButton_Click(object sender, RoutedEventArgs e)
         {
             GoToWorkWindow(sender, e);
+        }
+
+        private void PlayCreatureButton_Click(object sender, RoutedEventArgs e)
+        {
+            Ball ball = new Ball(Dispatcher, MainCanvas);
+            ball.SetRandomLocation();
+            ball.Start();
+
+            world.AddEntity(ball);
         }
     }
 }

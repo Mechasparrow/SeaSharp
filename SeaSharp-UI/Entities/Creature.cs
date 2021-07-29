@@ -35,7 +35,7 @@ namespace SeaSharp_UI.Entities
     enum CreatureState
     {
         MOVING_WITH_NO_PURPOSE,
-        HEADING_TOWARDS_FOOD
+        HEADING_TOWARDS_CONSUMABLE
     }
 
     public class Creature : AbstractCreature
@@ -152,6 +152,7 @@ namespace SeaSharp_UI.Entities
 
                 NotifyPropertyChanged("Hunger");
                 NotifyPropertyChanged("Thirst");
+                NotifyPropertyChanged("Play");
             }));
         }
 
@@ -173,15 +174,15 @@ namespace SeaSharp_UI.Entities
         {
             dispatcher.BeginInvoke(new Action(() =>
             {
-               
-
                 hunger = Math.Max(hunger - 10.0, 0);
                 thirst = Math.Max(thirst - 10.0, 0);
+                play = Math.Max(play - 10.0, 0);
 
                 NotifyPropertyChanged("Hunger");
                 NotifyPropertyChanged("Thirst");
+                NotifyPropertyChanged("Play");
 
-                if (hunger <= 0 || thirst <= 0)
+                if (hunger <= 0 || thirst <= 0 || play <= 0)
                 {
                     NotifyPropertyChanged("Death");
                 }
@@ -220,6 +221,20 @@ namespace SeaSharp_UI.Entities
             }));
         }
 
+        public Creature duplicateCreature(Dispatcher dispatcher, Canvas mainCanvas)
+        {
+            Creature duplicatedCreature = new Creature(dispatcher, mainCanvas);
+
+            duplicatedCreature.Name = this.Name;
+
+            duplicatedCreature.DaysPassed = this.DaysPassed;
+            duplicatedCreature.Hunger = this.Hunger;
+            duplicatedCreature.Thirst = this.Thirst;
+            duplicatedCreature.Play = this.Play;
+
+            return duplicatedCreature;
+        }
+
         private void CreatureLogic()
         {
             if (creatureState == CreatureState.MOVING_WITH_NO_PURPOSE)
@@ -243,7 +258,7 @@ namespace SeaSharp_UI.Entities
                 UpdateLocation(x + velocity.dx, y + velocity.dy);
 
             }
-            else if (creatureState == CreatureState.HEADING_TOWARDS_FOOD)
+            else if (creatureState == CreatureState.HEADING_TOWARDS_CONSUMABLE)
             {
 
                 CanvasBoundsCheck(canvasWidth, canvasHeight);
@@ -369,7 +384,7 @@ namespace SeaSharp_UI.Entities
 
                     if (consumableEntities.Count > 0)
                     {
-                        creatureState = CreatureState.HEADING_TOWARDS_FOOD;
+                        creatureState = CreatureState.HEADING_TOWARDS_CONSUMABLE;
 
                         if (currentTarget == null)
                         {
@@ -388,14 +403,19 @@ namespace SeaSharp_UI.Entities
                     {
                         AbstractEntity targetingEntity = affectedEntities.First(entity => entity == currentTarget);
 
-                        string updatingConsumableProperty;
-                        if (targetingEntity.GetType() == typeof(Food))
+                        string updatingConsumableProperty = string.Empty;
+                        Type consumableType = targetingEntity.GetType();
+
+                        if (consumableType == typeof(Food))
                         {
                             updatingConsumableProperty = "Hunger";
                         }
-                        else
+                        else if (consumableType == typeof(Drink))
                         {
                             updatingConsumableProperty = "Thirst";
+                        }else if (consumableType == typeof(Ball))
+                        {
+                            updatingConsumableProperty = "Play";
                         }
 
                         world.RemoveEntity(targetingEntity);
@@ -410,6 +430,9 @@ namespace SeaSharp_UI.Entities
                                     break;
                                 case "Thirst":
                                     thirst = Math.Min(thirst + 10, 100);
+                                    break;
+                                case "Play":
+                                    play = Math.Min(play + 10, 100);
                                     break;
                             }
 
