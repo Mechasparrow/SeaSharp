@@ -9,20 +9,20 @@ using SeaSharp_UI.Entities;
 
 namespace SeaSharp_UI
 {
-    enum WorldEventType
+    public enum WorldEventType
     {
         ENTITY_CHANGE,
         ENTITY_COLLISION
     }
 
-    class WorldEventArgs : EventArgs
+    public class WorldEventArgs : EventArgs
     {
         public World OccuringWorld;
         public WorldEventType WorldEventType;
         public List<AbstractEntity> affectedEntites;
     }
 
-    class World
+    public class World
     {
         private List<AbstractEntity> entities;
 

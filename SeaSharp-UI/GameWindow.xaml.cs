@@ -27,20 +27,48 @@ namespace SeaSharp_UI
         private Creature creature = null;
         private Random rnd = new Random();
 
+        private MoneyManager moneyManager;
+
+        private void InitGameState(Creature creature, MoneyManager moneyManager)
+        {
+            this.creature = new Creature(Application.Current.Dispatcher, MainCanvas);
+            
+            this.creature.Name = creature.Name;
+
+            this.creature.DaysPassed = creature.DaysPassed;
+            this.creature.Hunger = creature.Hunger;
+            this.creature.Thirst = creature.Thirst;
+            this.creature.Play = creature.Play;
+
+            this.creature.PropertyChanged += HandleCreatureUpdate;
+            this.creature.PropertyRefresh();
+            
+            this.moneyManager = moneyManager;
+            this.moneyManager.MoneyUpdated += HandleMoneyUpdate;
+            this.moneyManager.InvokeMoneyUpdate();
+
+            world = new World();
+
+            world.AddEntity(this.creature);
+
+        }
+
+        public GameWindow(Creature creature, MoneyManager moneyManager)
+        {
+            InitializeComponent();
+
+            this.InitGameState(creature, moneyManager);
+        }
 
         public GameWindow(string selectedCreature)
         {
             InitializeComponent();
 
-            world = new World();
-
+            MoneyManager moneyManager = new MoneyManager();
             creature = new Creature(Application.Current.Dispatcher, MainCanvas);
-            creature.PropertyChanged += HandleCreatureUpdate;
             creature.Name = selectedCreature;
 
-            world.AddEntity(creature);
-
-            renderDaysPassed(0);
+            this.InitGameState(creature, moneyManager);
         }
 
         public void RenderSea()
@@ -95,6 +123,11 @@ namespace SeaSharp_UI
                     Canvas.SetTop(seaTile, tileYOffset);
                 }
             }
+        }
+
+        public void HandleMoneyUpdate(object sender, EventArgs e)
+        {
+            MoneyText.Text = $"Money: {moneyManager.Money}";
         }
 
         public void HandleCreatureUpdate(object sender, PropertyChangedEventArgs e)
@@ -172,6 +205,32 @@ namespace SeaSharp_UI
             mainWindow.Show();
         }
 
+        private void GoToWorkWindow(object sender, RoutedEventArgs e)
+        {
+            if (creature != null)
+            {
+                creature.Destroy();
+            }
+
+            //TODO save creature state 
+
+            Window mainWindow = new GoToWorkWindow(this.creature, this.moneyManager);
+
+            Window currentWindow = App.Current.MainWindow;
+            var oldLeftX = currentWindow.Left;
+            var oldTopY = currentWindow.Top;
+
+            mainWindow.WindowStartupLocation = WindowStartupLocation.Manual;
+
+            mainWindow.Left = oldLeftX;
+            mainWindow.Top = oldTopY;
+
+            App.Current.MainWindow = mainWindow;
+
+            Close();
+            mainWindow.Show();
+        }
+
         private void Window_Closing(object sender, CancelEventArgs e)
         {
             if (creature != null)
@@ -211,6 +270,11 @@ namespace SeaSharp_UI
 
 
             world.AddEntity(drink);
+        }
+
+        private void GoToWorkButton_Click(object sender, RoutedEventArgs e)
+        {
+            GoToWorkWindow(sender, e);
         }
     }
 }

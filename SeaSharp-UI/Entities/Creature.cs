@@ -38,7 +38,7 @@ namespace SeaSharp_UI.Entities
         HEADING_TOWARDS_FOOD
     }
 
-    class Creature : AbstractCreature
+    public class Creature : AbstractCreature
     {
 
         private Thread creatureThread = null;
@@ -58,8 +58,10 @@ namespace SeaSharp_UI.Entities
         private int threadTickTime = 100;
 
         private int daysPassed = 0;
+
         private double hunger = 100.0;
         private double thirst = 100.0;
+        private double play = 100.0;
 
         private Random random = new Random();
 
@@ -73,6 +75,10 @@ namespace SeaSharp_UI.Entities
 
         public int DaysPassed
         {
+            set
+            {
+                daysPassed = value;
+            }
             get
             {
                 return daysPassed;
@@ -81,6 +87,10 @@ namespace SeaSharp_UI.Entities
 
         public double Thirst
         {
+            set
+            {
+                thirst = value;
+            }
             get
             {
                 return thirst;
@@ -89,9 +99,25 @@ namespace SeaSharp_UI.Entities
 
         public double Hunger
         {
+            set
+            {
+                hunger = value;
+            }
             get
             {
                 return hunger;
+            }
+        }
+
+        public double Play
+        {
+            set
+            {
+                play = value;
+            }
+            get
+            {
+                return play;
             }
         }
 
@@ -114,7 +140,19 @@ namespace SeaSharp_UI.Entities
 
             this.entitySize = creatureSize;
 
+
             creatureThread = new Thread(CreatureLoop);
+        }
+
+        public void PropertyRefresh()
+        {
+            dispatcher.BeginInvoke(new Action(() =>
+            {
+                NotifyPropertyChanged("Day");
+
+                NotifyPropertyChanged("Hunger");
+                NotifyPropertyChanged("Thirst");
+            }));
         }
 
         private void UpdateMovementTick(object state)
@@ -220,7 +258,7 @@ namespace SeaSharp_UI.Entities
 
             movementTimer = new Timer(UpdateMovementTick, null, 0, 1000);
             consumableTimer = new Timer(UpdateConsumables, null, 1000, 2000);
-            dayTimer = new Timer(UpdateDayTick, null, 0, 5000);
+            dayTimer = new Timer(UpdateDayTick, null, 5000, 5000);
 
             while (true)
             {

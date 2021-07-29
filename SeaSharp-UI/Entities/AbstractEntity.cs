@@ -10,7 +10,7 @@ using System.Windows.Threading;
 
 namespace SeaSharp_UI.Entities
 {
-    abstract class AbstractEntity : INotifyPropertyChanged
+    public abstract class AbstractEntity : INotifyPropertyChanged
     {
         protected Canvas mainCanvas;
         protected Dispatcher dispatcher;

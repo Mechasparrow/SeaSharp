@@ -55,8 +55,16 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="GoToWorkWindow.xaml.cs">
+      <DependentUpon>GoToWorkWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MoneyManager.cs" />
     <Compile Include="World.cs" />
     <Page Include="GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GoToWorkWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -111,6 +119,12 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="watercoin.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ocean-base.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ocean-discovery-01.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

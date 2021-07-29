@@ -9,7 +9,7 @@ using System.Windows.Threading;
 
 namespace SeaSharp_UI.Entities
 {
-    abstract class ConsumableEntity : AbstractEntity
+    public abstract class ConsumableEntity : AbstractEntity
     {
 
         protected int nutritionalValue;

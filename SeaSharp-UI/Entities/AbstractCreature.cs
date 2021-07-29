@@ -15,7 +15,7 @@ namespace SeaSharp_UI.Entities
 
     //https://docs.microsoft.com/en-us/dotnet/api/system.componentmodel.inotifypropertychanged.propertychanged?view=net-5.0
     //^ This should help isolate the Model, View, and Controller
-    abstract class AbstractCreature : AbstractEntity 
+    public abstract class AbstractCreature : AbstractEntity 
     {
         
         protected virtual void UpdateLocation(double newX, double newY)

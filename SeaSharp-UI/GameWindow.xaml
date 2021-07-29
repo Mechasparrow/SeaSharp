@@ -31,9 +31,9 @@
                     </StackPanel>
                     <DockPanel VerticalAlignment="Center" Grid.Column="1">
                         <Image Source="watercoin.png" Height="50" Width="50" />
-                        <TextBlock Width="121" VerticalAlignment="Center" FontSize="20">Money: 1000</TextBlock>
+                        <TextBlock Name="MoneyText" Width="121" VerticalAlignment="Center" FontSize="20">Money: 0</TextBlock>
 
-                        <Button Margin="10,10,10,10" >Go to Work</Button>
+                        <Button Margin="10,10,10,10" Click="GoToWorkButton_Click" >Go to Work</Button>
                     </DockPanel>
                 </Grid>
 
